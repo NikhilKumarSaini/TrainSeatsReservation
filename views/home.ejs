@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Train Reservation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🚂 ExpressTrain</div>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Schedules</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <h1>Book Your Seat on Express Train</h1>
+            <div class="booking-panel">
+                <form action="/book" method="POST">
+                    <div class="form-group">
+                        <label for="seats">Number of seats:</label>
+                        <input type="number" id="seats" name="seats" min="1" max="7" required>
+                    </div>
+                    <button type="submit" class="btn-book">Book Seats</button>
+                </form>
+            </div>
+            <% if (locals.error) { %>
+                <div class="alert error"><%= error %></div>
+            <% } %>
+            <% if (locals.message) { %>
+                <div class="alert success"><%= message %></div>
+            <% } %>
+            <div class="seat-map-container">
+                <h2>Seat Map</h2>
+                <div class="seat-map">
+                    <% train.seats.forEach(seat => { %>
+                        <div class="seat <%= seat.isBooked ? 'booked' : 'available' %>" title="Seat <%= seat.number %>">
+                            <%= seat.number %>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="seat available"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="seat booked"></div>
+                        <span>Booked</span>
+                    </div>
+                </div>
+            </div>
+            <% if (train.seats.every(seat => seat.isBooked)) { %>
+                <div class="reset-container">
+                    <form action="/reset" method="POST">
+                        <button type="submit" class="btn-reset">Reset All Seats</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 ExpressTrain Reservation System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
